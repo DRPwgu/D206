@@ -58,6 +58,11 @@
         missingno.matrix(DataFrame)
         missingno.bar(DataFrame)
 
+        # Find pattern sorting some variables
+            -- Example
+            sorted = DataFrame.sort_values(columns)
+            missingno.matrix(sorted)
+
 
 
 4- Check for outliers
