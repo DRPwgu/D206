@@ -40,6 +40,24 @@
 
 3- Check for null values
     a - treat missing values
+        Find missing values using -> DataFrame.info()
+                                  -> DataFrame.isnull()
+        Example to get total number and percentage of missing values
+            # Create a nullity DataFrame airquality_nullity
+            DataFrame_nullity = DataFrame.isnull()
+
+            # Calculate total of missing values
+            missing_values_sum = DataFrame_nullity.sum()
+            print('Total Missing Values:\n', missing_values_sum)
+
+            # Calculate percentage of missing values
+            missing_values_percent = DataFrame_nullity.mean() * 100
+            print('Percentage of Missing Values:\n', missing_values_percent)
+
+    b. Use missingno package to visualize missing values
+        missingno.matrix(DataFrame)
+
+
 
 4- Check for outliers
     a1- Use Z-Scores
