@@ -1,8 +1,9 @@
-pandas       -> Done!
-numpy        -> Done!
-matplotlib   -> Done!
-seaborn      -> Done!
-sklearn      -> Done!
-scipy        -> Done!
-missingno    -> Done!
-fancyimpute  -> Done!
+pandas          -> Done!
+numpy           -> Done!
+matplotlib      -> Done!
+seaborn         -> Done!
+sklearn         -> Done!
+scipy           -> Done!
+missingno       -> Done!
+fancyimpute     -> Done!
+Jupyte Notebook -> Done!
