@@ -1,0 +1,47 @@
+1- Check for duplicates
+    a.  Check for duplicates on the DataFrame using .duplicated() method
+        use a list of columns to check for duplicates using the arg - (subset = [column names])
+        use arg - (keep = False) to keep everything , "first" to keep the first value and "last"
+            to keep the last value
+        Example -> df.duplicated().sum()
+
+2- Check for data type (categorical vs quantitative)
+    a.  Change the value of a column to category data type if the value is an integer or ch
+        with no numerical order or value (df.astype("category"))
+        Example -> # Convert tire_sizes back to categorical
+                     ride_sharing['tire_sizes'] = ride_sharing['tire_sizes'].astype('category')
+
+    b - constraints
+        # Example clean data
+        dataFrame.column.str.replace(r'\D+', '') -> Replace anything it's not a number with nothing
+
+
+    c - range
+        Check for future dates -> Use dt.datetime.today()
+
+    d - uniqueness
+        ------Example finding unique values in categorical data-------------
+        # Find the cleanliness category in airlines not in categories
+        cat_clean = set(airlines['cleanliness']).difference(categories['cleanliness'])
+        # Find rows with that category
+        cat_clean_rows = airlines['cleanliness'].isin(cat_clean)
+        # Print rows with inconsistent category
+        print(airlines[cat_clean_rows])
+        # Print rows with consistent categories only
+        print(airlines[~cat_clean_rows])
+
+        # Converting column to datetime
+        # Convert account_opened to datetime
+        banking['account_opened'] = pd.to_datetime(banking['account_opened'],
+                                                # Infer datetime format
+                                                infer_datetime_format = True,
+                                                # Return missing value for error
+                                                errors = 'coerce')
+
+3- Check for null values
+    a - treat missing values
+
+4- Check for outliers
+    a1- Use Z-Scores
+    b2- Box-plot
+    c3= Histogram
