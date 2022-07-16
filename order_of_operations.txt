@@ -56,6 +56,7 @@
 
     b. Use missingno package to visualize missing values
         missingno.matrix(DataFrame)
+        missingno.bar(DataFrame)
 
 
 
