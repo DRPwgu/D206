@@ -1,11 +1,11 @@
 1- Check for duplicates
     a.  Check for duplicates on the DataFrame using .duplicated() method
         use a list of columns to check for duplicates using the arg - (subset = [column names])
-        use arg - (keep = False) to keep everything , "first" to keep the first value and "last"
+        use arg - (keep = False) to keep everything, "first" to keep the first value, and "last"
             to keep the last value
         Example -> df.duplicated().sum()
 
-2- Check for data type (categorical vs quantitative)
+2- Check for the data type (categorical vs quantitative)
     a.  Change the value of a column to category data type if the value is an integer or ch
         with no numerical order or value (df.astype("category"))
         Example -> # Convert tire_sizes back to categorical
@@ -63,9 +63,135 @@
             sorted = DataFrame.sort_values(columns)
             missingno.matrix(sorted)
 
+    c. Treat missing values using the imputation methods from sklearn SimpleImputer
+        1. strategy = ['mean', 'median', 'most_frequent', 'constant'] (Choose 1)
+        Example :
+        from sklearn.impute import SimpleImputer
+            # Create median imputer object
+            median_imputer = SimpleImputer(strategy='median')
+            # Impute median values in the DataFrame diabetes_median
+            diabetes_median.iloc[:, :] = median_imputer.fit_transform(diabetes_median)
 
+        ----- For better result fancyimpute package ------------------------------
+
+            # Import KNN from fancyimpute
+            from fancyimpute import KNN
+
+            # Copy diabetes to diabetes_knn_imputed
+            diabetes_knn_imputed = diabetes.copy()
+
+            # Initialize KNN
+            knn_imputer = KNN()
+
+            # Impute using fit_tranform on diabetes_knn_imputed
+            diabetes_knn_imputed.iloc[:, :] = knn_imputer.fit_transform(diabetes_knn_imputed)
+           _____________________________________________________________________________________
+            # Import IterativeImputer from fancyimpute
+            from fancyimpute import IterativeImputer
+
+            # Initialize IterativeImputer
+            mice_imputer = IterativeImputer()
+
+            # Impute using fit_tranform on diabetes
+            diabetes_mice_imputed.iloc[:, :] = mice_imputer.fit_transform(diabetes)
+
+    d. Imputing categorical Data
+
+        One-Hot Encoding if there is no order
+        Label Encoding for Yes/No -- True/False variables
+        Ordinal Encoding for variables that have an order
+
+        1. ------ # Create KNN imputer -----------
+            KNN_imputer = KNN()
+
+            # Impute and round the users DataFrame
+            users.iloc[:, :] = np.round(KNN_imputer.fit_transform(users))
+
+            # Loop over the column names in users
+            for col_name in users:
+
+                # Reshape the data
+                reshaped = users[col_name].values.reshape(-1, 1)
+
+                # Perform inverse transform of the ordinally encoded columns
+                users[col_name] = ordinal_enc_dict[col_name].inverse_transform(reshaped)
 
 4- Check for outliers
     a1- Use Z-Scores
     b2- Box-plot
     c3= Histogram
+
+    # Create the correlation matrix
+    corr = ansur_df.corr()
+
+    # Generate a mask for the upper triangle
+    mask = np.triu(np.ones_like(corr, dtype=bool))
+
+    # Add the mask to the heatmap
+    sns.heatmap(corr, mask=mask, cmap=cmap, center=0, linewidths=1, annot=True, fmt=".2f")
+    plt.show()
+
+5 - PCA
+    a. Use seaborn.pairplot(DataFrame, diag_kind='hist') to select column
+    Example:
+        sns.pairplot(DataFrame, hue='Gender', diag_kind='hist')
+        plt.show()
+
+    b. Scale the features using StandardScaler()
+    Example:
+    from sklearn.preprocessing import StandardScaler
+        scaler = StandardScaler()
+        std_DataFrame = pd.DataFrame(scaler.fit_transform(DF), columns = df.columns)
+
+        from sklearn.decomposition import PCA
+        pca = PCA()
+        pca.fit(std_DataFrame)
+
+        print(pca.explained_variance_ratio_)
+
+        print(pca.explained_variance_ratio_.cumsum())   # explain variance
+
+    C. Construct a pipeline
+        from sklearn.pipeline import Pipeline
+        Example : # Build the pipeline
+            pipe = Pipeline([('scaler', StandardScaler()),
+        	    ('reducer', PCA(n_components=2))])
+            # Fit it to the dataset and extract the component vectors
+            pipe.fit(poke_df)
+            vectors = pipe['reducer'].components_.round(2)
+
+            # Print feature effects
+            print('PC 1 effects = ' + str(dict(zip(poke_df.columns, vectors[0]))))
+            print('PC 2 effects = ' + str(dict(zip(poke_df.columns, vectors[1]))))
+
+        Example 2:
+            # Build the pipeline
+            pipe = Pipeline([
+                    ('scaler', StandardScaler()),
+                    ('reducer', PCA(n_components=3)),
+                    ('classifier', RandomForestClassifier(random_state=0))])
+
+            # Fit the pipeline to the training data
+            pipe.fit(X_train, y_train)
+
+            # Score the accuracy on the test set
+            accuracy = pipe.score(X_test, y_test)
+
+            # Prints the explained variance ratio and accuracy
+            print(pipe['reducer'].explained_variance_ratio_)
+            print(f'{accuracy:.1%} test set accuracy')
+
+            # Pipeline a scaler and pca selecting 10 components
+            pipe = Pipeline([('scaler', StandardScaler()),
+                             ('reducer', PCA(n_components=10))])
+
+            # Fit the pipe to the data
+            pipe.fit(ansur_df)
+
+            # Plot the explained variance ratio
+            plt.plot(pipe['reducer'].explained_variance_ratio_)
+
+            plt.xlabel('Principal component index')
+            plt.ylabel('Explained variance ratio')
+            plt.show()
+
